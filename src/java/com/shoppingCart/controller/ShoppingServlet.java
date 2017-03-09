@@ -67,36 +67,31 @@ public class ShoppingServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if(session == null){
+        if (session == null) {
             response.sendRedirect("shoppingError.jsp");
         }
-        ProductCart buyList = (ProductCart) session.getAttribute("prod");
+
+        ProductCart buyList = (ProductCart) request.getAttribute("prod");
         String action = request.getParameter("action");
-        if(!action.equalsIgnoreCase("CHECKOUT")){
-            if(action.equalsIgnoreCase("DELETE")){
+        if (!action.equalsIgnoreCase("Checkout")) {
+            if (action.equalsIgnoreCase("delete")) {
                 int productId = Integer.parseInt(request.getParameter("delItem"));
                 buyList.removeItem(productId);
-            } else{
-                if(action.equalsIgnoreCase("ADD")){
-                    if(buyList == null){
-                        buyList = new ProductCart();
-                        addProduct(request,response,buyList);
-                    }
+            } else if (action.equalsIgnoreCase("add")) {
+                if (buyList == null) {
+                    buyList = new ProductCart();
                 }
-                session.setAttribute("prod", buyList);
-                ServletContext sc = getServletContext();
-                RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");
-                rd.forward(request, response);
-            
-            }
-        }else{
-            if(action.equalsIgnoreCase("CHECKOUT")){
-                ServletContext sc = getServletContext();
-                RequestDispatcher rd = sc.getRequestDispatcher("/checkout.jsp");
-                rd.forward(request, response);
-            }
-        }
+                addProduct(request, response, buyList);
 
+                session.setAttribute("prod", buyList);
+                RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+                rd.forward(request, response);
+            } else if (action.equalsIgnoreCase("checkout")) {
+                RequestDispatcher rd = request.getRequestDispatcher("checkout.jsp");
+                rd.forward(request, response);
+            }
+
+        }
     }
 
     private void addProduct(HttpServletRequest request, HttpServletResponse response, ProductCart product) {
@@ -123,24 +118,24 @@ public class ShoppingServlet extends HttpServlet {
 
     }
 
-     private boolean validateQuantity(String quantity) {
-        boolean valid = false;
-        for(int i=0;i<quantity.length();i++){
-            if("0123456789".indexOf(quantity.charAt(i))>=0){
-                valid = true;
-            }else
-            {
-                valid = false;
+    private boolean validateQuantity(String quantity) {
+        boolean vali = false;
+        for (int i = 0; i < quantity.length(); i++) {
+            if ("0123456789".indexOf(quantity.charAt(i)) >= 0) {
+                vali = true;
+            } else {
+                vali = false;
                 break;
             }
+
         }
-        if(!valid){
+
+        if (!vali) {
             return false;
-        }else{
+        } else {
             return Integer.parseInt(quantity) != 0;
         }
     }
-
 
     /**
      * Returns a short description of the servlet.

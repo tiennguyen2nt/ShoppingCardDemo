@@ -21,22 +21,22 @@
             <td><b><fmt:message key="quantity" /></b></td>
         </tr>
         
-        <c:forEach var="item" items="${prod.cartItems}}">
-            <tr>
-                <td>${item.id}</td>
-                <td>${item.name}</td>
-                <td>${item.type}</td>
-                <td>${item.price}</td>
-                <td>${item.quantity}</td>
-                <td>
-                    <form action="ShoppingServlet" name="deleteFrom" method="post">
-                        <input type="submit" value="<fmt:message key="delete" />"/>
-                        <input type="hidden" name="delItem" value="${item.getId()}"/>
-                        <input type="hidden" name="action" value="Delete" />
-                    </form>
-                </td>
-            </tr>
-        </c:forEach>
+        <c:forEach var="item" items="${prod.cartItems}">
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.type}</td>
+                    <td>${item.price}</td>
+                    <td>${item.quantity}</td>
+                    <td>
+                        <form action="ShoppingServlet" name="deleteForm" method="post">
+                            <input type="submit" value=<fmt:message key="Delete"/>>
+                            <input type="hidden" name="delItem" value="${item.id}">
+                            <input type="hidden" name="action" value=<fmt:message key="Delete"/>>
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
     </table>
         <form name="CheckOutForm" method="post" action="Shopping">
             <input type="hidden" name="action" value="checkout" />
