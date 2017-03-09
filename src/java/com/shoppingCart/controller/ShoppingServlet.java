@@ -7,7 +7,6 @@ package com.shoppingCart.controller;
 
 import com.shoppingCart.model.ProductCart;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,6 +84,7 @@ public class ShoppingServlet extends HttpServlet {
                     }
                     addProduct(request, response, buyList);
                     session.setAttribute("prod", buyList);
+                   break;
             }
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
