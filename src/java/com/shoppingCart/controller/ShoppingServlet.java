@@ -36,7 +36,7 @@ public class ShoppingServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        //
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,26 +71,26 @@ public class ShoppingServlet extends HttpServlet {
             response.sendRedirect("shoppingError.jsp");
         }
 
-        ProductCart buyList = (ProductCart) request.getAttribute("prod");
+        ProductCart buyList = (ProductCart) session.getAttribute("prod");
         String action = request.getParameter("action");
         if (!action.equalsIgnoreCase("Checkout")) {
-            if (action.equalsIgnoreCase("delete")) {
-                int productId = Integer.parseInt(request.getParameter("delItem"));
-                buyList.removeItem(productId);
-            } else if (action.equalsIgnoreCase("add")) {
-                if (buyList == null) {
-                    buyList = new ProductCart();
-                }
-                addProduct(request, response, buyList);
-
-                session.setAttribute("prod", buyList);
-                RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-                rd.forward(request, response);
-            } else if (action.equalsIgnoreCase("checkout")) {
-                RequestDispatcher rd = request.getRequestDispatcher("checkout.jsp");
-                rd.forward(request, response);
+            switch (action.toLowerCase()) {
+                case "delete":
+                    int productId = Integer.parseInt(request.getParameter("delItem"));
+                    buyList.removeItem(productId);
+                    break;
+                case "add":
+                    if (buyList == null) {
+                        buyList = new ProductCart();
+                    }
+                    addProduct(request, response, buyList);
+                    session.setAttribute("prod", buyList);
             }
-
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+            rd.forward(request, response);
+        } else if (action.equalsIgnoreCase("checkout")) {
+            RequestDispatcher rd = request.getRequestDispatcher("checkout.jsp");
+            rd.forward(request, response);
         }
     }
 
